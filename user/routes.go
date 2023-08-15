@@ -10,7 +10,7 @@ var Routes = router.RoutePrefix{
 			"GET",
 			"",
 			HelloHandler,
-			false,
+			true,
 		},
 	},
 }

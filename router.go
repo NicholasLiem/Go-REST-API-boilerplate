@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/NicholasLiem/GoLang_Microservice/middleware"
 	customRouter "github.com/NicholasLiem/GoLang_Microservice/router"
 	"github.com/NicholasLiem/GoLang_Microservice/user"
+	"github.com/NicholasLiem/GoLang_Microservice/utils/jwt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -11,7 +13,7 @@ func NewRouter() *mux.Router {
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes)
+	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes)
 	for _, route := range customRouter.AppRoutes {
 
 		//create sub route
@@ -24,7 +26,7 @@ func NewRouter() *mux.Router {
 			handler = subRoute.HandlerFunc
 
 			if subRoute.Protected {
-				handler = nil // use middleware
+				handler = middleware.Middleware(subRoute.HandlerFunc) // use middleware
 			}
 
 			//register the route
